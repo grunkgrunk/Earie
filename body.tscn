@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://hand.jpg" type="Texture" id=1]
+[ext_resource path="res://body.gd" type="Script" id=2]
+[ext_resource path="res://mypalfootfoot.jpg" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 31, 29.5 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 30, 30.5 )
+
+[sub_resource type="CircleShape2D" id=3]
+
+[node name="body" type="Node2D"]
+position = Vector2( 326, 199 )
+script = ExtResource( 2 )
+
+[node name="foot" type="Area2D" parent="." groups=["dragonball"]]
+position = Vector2( 1, 111 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="foot"]
+position = Vector2( 1, -1.5 )
+shape = SubResource( 1 )
+
+[node name="Icon" type="Sprite" parent="foot"]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 3 )
+
+[node name="body" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="body"]
+current = true
+smoothing_enabled = true
+
+[node name="hand" type="Area2D" parent="body" groups=["dragonball"]]
+position = Vector2( 2, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="body/hand"]
+position = Vector2( 0, -1.5 )
+shape = SubResource( 2 )
+
+[node name="Icon" type="Sprite" parent="body/hand"]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="grab" type="Position2D" parent="body/hand"]
+position = Vector2( 1, 2 )
+
+[node name="touch" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="touch"]
+shape = SubResource( 3 )
