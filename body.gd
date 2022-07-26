@@ -34,7 +34,7 @@ func reparent(child: Node, new_parent: Node):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if Input.is_action_just_pressed("left_click"):
-		var overlaps = $touch.get_overlapping_areas()
+		var overlaps = $touch.get_overlapping_bodies()
 		for o in overlaps:
 			if o.is_in_group("dragonball"): # draggable-ish
 				print(o)
@@ -53,7 +53,7 @@ func _process(delta):
 
 		if holding == hand:
 			if grab.get_child_count() == 0:
-				var overlaps = hand.get_overlapping_areas()
+				var overlaps = hand.get_node('pickup').get_overlapping_areas()
 				for o in overlaps:
 					print(o)
 					if o.is_in_group("pick_up"):
@@ -77,10 +77,8 @@ func _process(delta):
 
 	
 	if holding != null:
-		holding.global_position = $touch.global_position 
-
-	if holding == eye:
-		eye.global_position = $touch.global_position
+		# holding.global_position = $touch.global_position 
+		holding.move_and_slide(($touch.global_position - holding.global_position)*10)	
 
 
 	if singing:
