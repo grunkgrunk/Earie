@@ -47,7 +47,7 @@ func _process(delta):
 				$shader.visible = true
 				singing = true
 				mouth.get_node("vocal").play()
-				last_note = n_notes + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
+				last_note = n_notes - round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
 				melody = [last_note]
 		# holding = hover
 	
@@ -92,7 +92,7 @@ func _process(delta):
 
 
 	if singing:
-		var note =  n_notes + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
+		var note =  n_notes - round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
 		mouth.get_node("vocal").pitch_scale = note/n_notes
 		if not last_note == note:
 			mouth.get_node("vocal").play()
