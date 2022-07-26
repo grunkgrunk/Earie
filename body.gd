@@ -1,5 +1,8 @@
 extends Node2D
 
+# TODO:
+# fix shader screen resized
+
 
 onready var hand = $body/hand
 onready var foot = $foot
@@ -16,6 +19,7 @@ var eye_offset
 var singing = false
 var last_note = 13
 var melody = []
+var n_notes = 6
 
 func _ready():
 	# $touch.connect("area_entered", self, "_on_touch_enter")
@@ -40,9 +44,10 @@ func _process(delta):
 				print(o)
 				holding = o
 			elif o.is_in_group("mouth"):
+				$shader.visible = true
 				singing = true
 				mouth.get_node("vocal").play()
-				last_note = 13
+				last_note = n_notes + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
 				melody = [last_note]
 		# holding = hover
 	
@@ -52,6 +57,7 @@ func _process(delta):
 			print(melody)
 			send_melody(melody)
 			melody = []
+			$shader.visible = false
 		if holding == foot:
 			body.global_position = holding.global_position + foot_offset
 
@@ -86,8 +92,8 @@ func _process(delta):
 
 
 	if singing:
-		var note =  12 + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*12)
-		mouth.get_node("vocal").pitch_scale = note/12
+		var note =  n_notes + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*n_notes)
+		mouth.get_node("vocal").pitch_scale = note/n_notes
 		if not last_note == note:
 			mouth.get_node("vocal").play()
 			last_note = note
