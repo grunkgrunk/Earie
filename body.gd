@@ -14,8 +14,8 @@ var foot_offset
 var hand_offset
 var eye_offset
 var singing = false
-var last_note = 1
-# Called when the node enters the scene tree for the first time.
+var last_note = 13
+var melody = []
 
 func _ready():
 	# $touch.connect("area_entered", self, "_on_touch_enter")
@@ -42,12 +42,16 @@ func _process(delta):
 			elif o.is_in_group("mouth"):
 				singing = true
 				mouth.get_node("vocal").play()
-				last_note = 1
+				last_note = 13
+				melody = [last_note]
 		# holding = hover
 	
 	if Input.is_action_just_released("left_click"):
 		if singing:
 			singing = false
+			print(melody)
+			send_melody(melody)
+			melody = []
 		if holding == foot:
 			body.global_position = holding.global_position + foot_offset
 
@@ -82,12 +86,12 @@ func _process(delta):
 
 
 	if singing:
-		var note =  1 + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*12)/12
-		mouth.get_node("vocal").pitch_scale = note
+		var note =  12 + round((get_viewport().get_mouse_position() - get_viewport_rect().size/2).y/(get_viewport_rect().size.y/2)*12)
+		mouth.get_node("vocal").pitch_scale = note/12
 		if not last_note == note:
 			mouth.get_node("vocal").play()
 			last_note = note
-		print(note)
+			melody.append(note)
 
 
 # func _on_touch_enter(obj):
@@ -98,3 +102,11 @@ func _process(delta):
 # 	hover = null
 
 
+func send_melody(mel):
+	var overlaps = body.get_overlapping_areas()
+	print("sang melody")
+	for o in overlaps:
+		if o.is_in_group("door"):
+			print("Sent melody")
+
+			o.send_melody(mel)
